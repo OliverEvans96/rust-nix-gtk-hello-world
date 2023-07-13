@@ -1,4 +1,4 @@
-use gtk::prelude::*;
+use gtk::{prelude::*, Label};
 use gtk::{Application, ApplicationWindow};
 use gtk4 as gtk;
 
@@ -15,6 +15,10 @@ fn main() -> glib::ExitCode {
             .default_height(200)
             .title("Hello, World!")
             .build();
+
+        let label = Label::new(Some("It works!"));
+
+        window.set_child(Some(&label));
 
         // Show the window.
         window.show();

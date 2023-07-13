@@ -4,7 +4,7 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -26,13 +26,17 @@
           rust-toolchain
           rust-analyzer
 
+          glibc
+          gtk4
+          # gdk-pixbuf
+
           # lld
           # clang
 
           # cargo-edit
           # cargo-watch
 
-          # pkgconfig
+          pkgconfig
           # udev
         ]);
 
