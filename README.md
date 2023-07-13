@@ -4,7 +4,7 @@ This is a simple example of building a rust app via nix, with some C dependencie
 
 ## Usage
 
-Clone the repo, then run `nix develop` to enter a dev shell with the dependencies available, then `cargo build`.
+Clone the repo, then run `nix develop` to enter a dev shell with the dependencies available, then `cargo build` (assuming you already have `cargo` and `rust` installed on your system).
 
 Or, simply `nix run` to build and run the app.
 
