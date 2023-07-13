@@ -1,34 +1,34 @@
 {
   inputs = {
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixpkgs.url = "nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
+    naersk.url = "github:nix-community/naersk";
   };
 
-  outputs = { self, fenix, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, naersk }:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      fenix-system = fenix.packages.x86_64-linux;
-      rust-toolchain =
-        (with fenix-system; combine [ default.toolchain complete.rust-src ]);
+      # fenix-system = fenix.packages.x86_64-linux;
+      # rust-toolchain =
+      #   (with fenix-system; combine [ default.toolchain complete.rust-src ]);
+      naersk' = pkgs.callPackage naersk { };
+      nativeBuildInputs = with pkgs; [ pkgconfig glibc gtk4 ];
 
-    in flake-utils.lib.eachDefaultSystem (system: {
-      defaultPackage = pkgs.hello;
+    in flake-utils.lib.eachDefaultSystem (system: rec {
+      defaultPackage = naersk'.buildPackage {
+        inherit nativeBuildInputs;
+        src = ./.;
+      };
+
       devShell = pkgs.mkShell {
+        inherit nativeBuildInputs;
         name = "rust-env";
         src = ./.;
+      };
 
-        nativeBuildInputs = (with pkgs; [
-          rust-toolchain
-          rust-analyzer
-
-          glibc
-          gtk4
-          pkgconfig
-        ]);
+      apps.default = {
+        type = "app";
+        program = "${defaultPackage}/bin/gtk-hello-world";
       };
     });
 }
